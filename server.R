@@ -34,7 +34,13 @@ server <- function(input, output,session) {
     str(tr_data())
   })
   
+  output$miss_plot <- renderPlot({
+    req(input$tr_data$datapath)
+    Amelia::missmap(tr_data())
+  })
   
+  
+  #-----------------------#
   output$y_ui <- renderUI({
     req(input$tr_data$datapath)
     selectInput(inputId = 'sel_y',label = "Select Y (Target Variable)",choices = tr_cols(),multiple = FALSE)
@@ -80,13 +86,14 @@ server <- function(input, output,session) {
     X <- tr_data()[,input$sel_x]
     df0 <- data.frame(y,X)
     #df0 
+   withProgress(message = 'Training in progress. Please wait ...',
    mod_list <- runfunc(df0 = df0,
                  kfoldcv_ui = input$kfold,
                  train_propn_ui = input$tr_per,
                  pred_data = NULL,
                  model_selected_ui = input$model_sel,
                  svm_type = input$svm_type)
-   
+    )
    return(mod_list)
     # 
     #            
@@ -196,8 +203,8 @@ server <- function(input, output,session) {
     out_pred_df = data.frame("prediction" = p3, pred_data)
     })# downloadable file. })
   # 
-  output$test_op <- renderDataTable({
-       head(out_pred_df(), 10) # display 10 rows of this as HTML tbl
+  output$test_op <- DT::renderDataTable({
+       head(out_pred_df(), 25) # display 10 rows of this as HTML tbl
   })
   # 
   output$download_pred <- downloadHandler(

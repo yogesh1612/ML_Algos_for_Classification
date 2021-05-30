@@ -12,4 +12,5 @@ if (!require('klaR')){install.packages('klaR')}; library(klaR)
 if (!require('tidyverse')){install.packages('tidyverse')}; library(tidyverse)
 if (!require('Amelia')){install.packages('Amelia')}; library(Amelia)
 if (!require('mlbench')){install.packages('mlbench')}; library(mlbench)
+if (!require('dplyr')){install.packages('dplyr')}; library(dplyr)
 

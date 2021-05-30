@@ -21,7 +21,7 @@ shinyUI(fluidPage(
                                               "Neural Networks" = "nn")),
                      uiOutput("svm_type_ui"),
                      sliderInput("tr_per",
-                                 label = "percentage of training data",
+                                 label = "Percentage of training data",
                                  min = 0,
                                  max = 1,
                                  value = 0.7,
@@ -49,12 +49,13 @@ shinyUI(fluidPage(
                hr(),
                h4("Data Structure"),
                verbatimTextOutput("data_str"),
-               h4('PCA plot'),
-               plotOutput("pca_plot")
-              
+               h4("Missingness Map"),
+               plotOutput("miss_plot")
+               
       ),
       tabPanel("Model Results", value=3,
                h4("Model Summary"),
+               helpText("Training may take a while, upto a minute"),
                verbatimTextOutput("mod_sum"),
                p("Model Result"),
                verbatimTextOutput("mod_res"),
@@ -71,6 +72,8 @@ shinyUI(fluidPage(
                
       ),
       tabPanel("Plots",value=3,
+               h4('PCA plot'),
+               plotOutput("pca_plot"),
                h4("Confuison Matrix (Test Set)"),
                # HTML('<button data-toggle="collapse" data-target="#demo1">Detailed Result</button>'),
                plotOutput('conf_test_plot')
@@ -82,7 +85,7 @@ shinyUI(fluidPage(
    
       tabPanel("Prediction Output",value=3,
                helpText("Note: Please upload test data with same features in train dataset"),
-               dataTableOutput("test_op"),
+               DT::dataTableOutput("test_op"),
                downloadButton("download_pred")
                
       ),

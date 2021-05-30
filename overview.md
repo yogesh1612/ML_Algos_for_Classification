@@ -1,15 +1,25 @@
 #### Overview & Example Datasets
 
-**Random forests** or **random decision forests** are an [ensemble learning](https://en.wikipedia.org/wiki/Ensemble_learning) method for [classification](https://en.wikipedia.org/wiki/Statistical_classification), [regression](https://en.wikipedia.org/wiki/Regression_analysis) and other tasks that operates by constructing a multitude of [decision trees](https://en.wikipedia.org/wiki/Decision_tree_learning) at training time and outputting the class that is the [mode](https://en.wikipedia.org/wiki/Mode_(statistics)) of the classes (classification) or mean/average prediction (regression) of the individual trees.[[1\]](https://en.wikipedia.org/wiki/Random_forest#cite_note-ho1995-1)[[2\]](https://en.wikipedia.org/wiki/Random_forest#cite_note-ho1998-2) - [WikiPedia](https://en.wikipedia.org/wiki/Random_forest)
+This app performs supervised learning on training dataset. Below are some models (with definition) that user can apply on their datasets using the app
+
+1. **<u>Logistic Regression</u>** (or **logit model**) is used to model the probability of a certain class or event existing such as pass/fail, win/lose, alive/dead or healthy/sick.[[1]](https://en.wikipedia.org/wiki/Logistic_regression)
+
+2. **<u>Naïve Bayes</u>** are a family of simple "[probabilistic classifiers](https://en.wikipedia.org/wiki/Probabilistic_classification)" based on applying [Bayes' theorem](https://en.wikipedia.org/wiki/Bayes'_theorem) with strong (naïve) [independence](https://en.wikipedia.org/wiki/Statistical_independence) assumptions between the features (see [Bayes classifier](https://en.wikipedia.org/wiki/Bayes_classifier)).[[2]](https://en.wikipedia.org/wiki/Naive_Bayes_classifier)
+
+3. **<u>Support Vector Machines</u>** are a [supervised learning](https://brilliant.org/wiki/supervised-learning/) method used to perform binary classification on data. They are motivated by the principle of *optimal separation*, the idea that a good classifier finds the largest gap possible between data points of different classes.[[3]](https://brilliant.org/wiki/support-vector-machines/)
+
+4. <u>**Neural Networks** (**NNs**)</u>, are computing systems vaguely inspired by the [biological neural networks](https://en.wikipedia.org/wiki/Biological_neural_network)[[4]](https://en.wikipedia.org/wiki/Artificial_neural_network)
+
+   
 
 ------
 
 #### How to use this App
 
 1. Upload training data from sidebar panel
-2. Go to RF Results tab and select Y and X variables from sidebar panel and then select task at hand i.e. classification or regression
+2. Go to Model Results tab and select Y and X variables from sidebar panel and then select algorithm to train
 3. Select percentage of data required for training model
-4. Tune random forest parameter
+4. Tune model parameters
 5. Click on Train model 
 
 
