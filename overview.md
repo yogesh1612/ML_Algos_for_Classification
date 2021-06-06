@@ -24,7 +24,7 @@ This app performs supervised learning on training dataset. Below are some models
 
 
 
-Once your model is trained, You may find training results & corresponding plots in RF Results, RF Plots and Variable Importance Tabs.
+Once your model is trained, You may find training report & plots in Model Results and Plot Tabs respectively. 
 
 ------
 

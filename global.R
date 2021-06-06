@@ -48,7 +48,11 @@ runfunc <- function(df0,
   require(rsample)
   set.seed(123)
   
-  if (is.numeric(df0$y)){df0$y = as.factor(paste0('y_', df0$y))}
+  if (is.numeric(df0$y)){
+    df0$y = as.factor(paste0('y_', df0$y))
+  }else{
+      df0$y <- as.factor(df0$y)
+    }
   inTrain <- createDataPartition(y = df0$y, p = train_propn_ui, list=FALSE)
   df0_train <-df0[inTrain,]
   df0_test <- df0[-inTrain,]

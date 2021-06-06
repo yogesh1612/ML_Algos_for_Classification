@@ -2,13 +2,13 @@ server <- function(input, output,session) {
   
   tr_data <-  reactive({
     req(input$tr_data$datapath)
-    df <- read.csv(input$tr_data$datapath,stringsAsFactors = TRUE)
+    df <- read.csv(input$tr_data$datapath,stringsAsFactors = FALSE)
     return(df)
   })
   
   test_data <-  reactive({
     req(input$test_data$datapath)
-    df <- read.csv(input$test_data$datapath,stringsAsFactors = TRUE)
+    df <- read.csv(input$test_data$datapath,stringsAsFactors = FALSE)
     return(df)
   })
   
