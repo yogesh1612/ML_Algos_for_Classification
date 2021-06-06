@@ -121,6 +121,7 @@ server <- function(input, output,session) {
   })
   
   output$mod_sum <- renderPrint({
+    req(model())
     if(input$model_sel=='lg_reg'){
       summary(model()[[1]])
     }
