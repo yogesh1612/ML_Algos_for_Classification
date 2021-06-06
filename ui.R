@@ -74,9 +74,12 @@ shinyUI(fluidPage(
       tabPanel("Plots",value=3,
                h4('PCA plot'),
                plotOutput("pca_plot"),
-               h4("Confuison Matrix (Test Set)"),
                # HTML('<button data-toggle="collapse" data-target="#demo1">Detailed Result</button>'),
-               plotOutput('conf_test_plot')
+               h4("Model Performance (Cross Validation)"),
+               verbatimTextOutput('conf_train'),
+               h4("Model Performance (Test data)"),
+               verbatimTextOutput('conf_test')
+               
               # h4("Error Rate Plot"),
               # plotOutput("err_rate"),
               # h4("ROC-AUC Curve"),

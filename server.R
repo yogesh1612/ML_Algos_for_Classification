@@ -137,28 +137,36 @@ server <- function(input, output,session) {
   #                main="")
   # })
   # 
-  test_predict <- reactive(
+  train_predict <- reactive(
     {
       req(model())
       pred <- predict(model()[[1]],model()[[2]][,input$sel_x])
       pred
     }
   )
-  output$conf_test_plot <- renderPlot({
-    cnf <- confusionMatrix(test_predict(),model()[[2]]$y)
-    fourfoldplot(cnf$table,
-                 color = c("#CC6666", "#99CC99"),
-                 conf.level = 0,
-                 main="")
+  test_predict <- reactive(
+    {
+      req(model())
+      pred <- predict(model()[[1]],model()[[3]][,input$sel_x])
+      pred
+    }
+  )
+  output$conf_train <- renderPrint({
+    #cnf <- confusionMatrix(train_predict(),model()[[2]]$y)
+    cnf <- confusionMatrix(model()[[1]])
+   # cat("---Confusion Matrix (Training Data)---")
+    cnf
+
+    #cat("\nAccuracy on training data is ", cnf[[3]][1])
+  })
+  
+  output$conf_test <- renderPrint({
+    cnf <- confusionMatrix(test_predict(),model()[[3]]$y)
+    cnf
   })
 
-  # output$conf_train <- renderPrint({
-  #   data()[[2]]
-  # })
-  # 
-  output$conf_test <- renderPrint({
-   model()[[1]]
-  })
+
+
 
   #----RF Plot output tab ------#
   # output$err_rate <- renderPlot({

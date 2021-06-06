@@ -73,7 +73,7 @@ runfunc <- function(df0,
                       family = 'binomial',
                       trControl = train_control)
     
-    return(list(logit.CV,df0_test))
+    return(list(logit.CV,df0_train,df0_test))
  
   } # model ends
   
@@ -83,7 +83,7 @@ runfunc <- function(df0,
       svm2 <- train(y ~., data = df0_train, method = "svmLinear", 
                     trControl = train_control,  preProcess = c("center","scale")) #7s
       
-      return(list(svm2,df0_test))
+      return(list(svm2,df0_train,df0_test))
     
     } # MODEL ENDS
     
@@ -94,7 +94,7 @@ runfunc <- function(df0,
                     trControl = train_control,  preProcess = c("center","scale"), 
                     tuneGrid = expand.grid(C = seq(0, 3, length = 25)))  # # 6s
       
-      return(list(svm3,df0_test))
+      return(list(svm3,df0_train,df0_test))
     }
     
     
@@ -104,7 +104,7 @@ runfunc <- function(df0,
                      trControl = train_control, preProcess = c("center","scale"), 
                      tuneLength = 10)
       
-      return(list(svm3a,df0_test))
+      return(list(svm3a,df0_train,df0_test))
     } # model ends
     
     ## non-linear SVM using polynomial bases
@@ -114,7 +114,7 @@ runfunc <- function(df0,
                     trControl = train_control, preProcess = c("center","scale"), 
                     tuneLength = 4)
       
-      return(list(svm4,df0_test))
+      return(list(svm4,df0_train,df0_test))
     } # MODEL ENDS
     
   } #---SVM ends here
@@ -139,7 +139,7 @@ runfunc <- function(df0,
                       #preProc = c("center", "scale"),
                       metric = 'ROC')
      })
-  return(list(nb_fit,df0_test))
+  return(list(nb_fit,df0_train,df0_test))
 } # func ends
 
   if (model_selected_ui == "nn"){ 
@@ -162,7 +162,7 @@ runfunc <- function(df0,
                         metric = 'ROC',
                         tuneGrid=expand.grid(size=c(10), decay=c(0.1)))  
     }) # 26 secs!
-    return(list(nnet_fit,df0_test))
+    return(list(nnet_fit,df0_train,df0_test))
   }
 
 }
