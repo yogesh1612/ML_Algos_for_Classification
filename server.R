@@ -117,6 +117,30 @@ server <- function(input, output,session) {
     
   })
   
+  
+  output$t1 <- renderUI({
+    if(input$model_sel=="lg_reg"){
+      checkboxInput('sho_log',"Show coefficients",value = T)
+    }else{
+      NULL
+    }
+  })
+  
+  output$t2 <- renderUI({
+    if(input$sho_log==T){
+      DT::dataTableOutput("lg_reg_tb")
+    }else{
+      NULL
+    }
+  })
+  
+  
+  output$lg_reg_tb <- renderDataTable({
+    req(model())
+    summ_tb <-  as.data.frame(summary(model()[[1]])$coefficients %>% round(., 3))
+    summ_tb
+  })
+  
   output$mod_res <- renderPrint({
     req(model())
     model()[[1]]$results

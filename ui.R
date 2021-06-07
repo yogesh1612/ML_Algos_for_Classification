@@ -59,6 +59,8 @@ shinyUI(fluidPage(
                h4("Model Summary"),
                helpText("Training may take a while, upto a minute"),
                verbatimTextOutput("mod_sum"),
+               uiOutput("t1"),
+               uiOutput("t2"),
                p("Model Result"),
                verbatimTextOutput("mod_res"),
                hr(),
