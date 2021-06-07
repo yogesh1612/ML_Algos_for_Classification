@@ -127,12 +127,13 @@ server <- function(input, output,session) {
   })
   
   output$t2 <- renderUI({
-    if(input$sho_log==T){
-      DT::dataTableOutput("lg_reg_tb")
-    }else{
-      NULL
-    }
-  })
+      if(input$model_sel=="lg_reg"){
+        DT::dataTableOutput("lg_reg_tb")
+      }else{
+        NULL
+      }
+      
+    })
   
   
   output$lg_reg_tb <- renderDataTable({
