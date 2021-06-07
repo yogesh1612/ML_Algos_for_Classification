@@ -120,7 +120,7 @@ server <- function(input, output,session) {
   
   output$t1 <- renderUI({
     if(input$model_sel=="lg_reg"){
-      checkboxInput('sho_log',"Show coefficients",value = T)
+      checkboxInput('sho_log',"Show coefficients",value = F)
     }else{
       NULL
     }
@@ -136,7 +136,7 @@ server <- function(input, output,session) {
   
   
   output$lg_reg_tb <- renderDataTable({
-    req(model())
+    req(input$sho_log)
     summ_tb <-  as.data.frame(summary(model()[[1]])$coefficients %>% round(., 3))
     summ_tb
   })
