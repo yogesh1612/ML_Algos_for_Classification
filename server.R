@@ -1,3 +1,5 @@
+options(warn=-1)
+
 server <- function(input, output,session) {
   
   tr_data <-  reactive({
@@ -175,9 +177,9 @@ server <- function(input, output,session) {
   #   plot(data()[[1]],main="Error Rate")
   # })
   # 
-  # output$roc <- renderPlot({
-  #   data()[[4]]
-  # })
+  output$roc <- renderPlot({
+    plot_roc_gen(model()[[1]],model()[[3]])
+  })
   # 
   # #-----Var Imp Plot ----#
   # 

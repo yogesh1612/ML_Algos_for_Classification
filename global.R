@@ -1,40 +1,55 @@
 # Needs to import ROCR package for ROC curve plotting:
 library(ROCR)
 
-plot_roc <- function(rf, test_y, test_X){  # test_y = test$y
+plot_roc <- function(model0, df0_test){
   
-  prediction_for_roc_curve <- predict(rf, test_X, type="prob")
+  model.probs <- predict(model0, df0_test[,-1], type="prob")
   
-  pretty_colours <- c("#F8766D","#00BA38","#619CFF", "orange", "purple", "azure3")
-  
-  classes <- levels(test_y)
-  
-  for (i in 1:length(classes)){
-    
-    true_values <- ifelse(test_y == classes[i], 1, 0) # Define class[i] membership
-    
-    pred <- prediction(prediction_for_roc_curve[,i], true_values) # Assess classifier perf for class[i]
-    
-    perf <- performance(pred, "tpr", "fpr")
-    if (i==1)
-    {
-      plot(perf, main="ROC Curve", col=pretty_colours[i]) 
-    }
-    else
-    {
-      plot(perf, main="ROC Curve", col=pretty_colours[i], add=TRUE) 
-    }
-    
-    # abline(a=0, b=1, col="black")
-    auc.perf <- performance(pred, measure = "auc") # Calc AUC and print on screen
-    print(auc.perf@y.values)
-  } # i loop ends
+  pred <- prediction(model.probs[,2], df0_test$y)
+  perf <- performance(pred,"tpr","fpr")
+  auc_ROCR <- performance(pred, measure = "auc")
+  auc <- auc_ROCR@y.values[[1]]; 
+  print(auc)  # print this below ROC curve in plots tab
+  plot(perf,colorize=TRUE)  # display this in output Plots tab
+  legend("bottomright",
+         bty = "n",
+         horiz = F,
+         legend = paste0("AUC Score ",round(auc,3)),
+         cex = 1)
   
 } # func ends
 
-# test-drive
-# plot_roc(rf, test$y, test[,-1])
 
+require(pROC)
+plot_roc_multi <- function(model0, df0_test){
+  model_preds = predict(model0, df0_test[,-1])
+  y_test = as.factor(make.names(df0_test$y))
+  a0 = multiclass.roc(y_test, as.numeric(model_preds))
+  print(auc(a0))  # print for display
+  
+  # plotting func. Display the one below
+  rs <- a0[['rocs']]; length(rs)
+  n1 = length(unique(y_test))
+  plot.roc(rs[[1]])
+  legend("bottomright",
+         bty = "n",
+         horiz = F,
+         legend = paste0("AUC Score ",round(auc(a0),3)),
+         cex = 1)
+  sapply(2:n1, function(i) lines.roc(rs[[i]],col=i))
+  
+} # func ends
+
+#'--- choosing between binary and multiclass ROC --- '
+plot_roc_gen <- function(model0, df0_test){
+  
+  if (length(unique(df0_test$y)) > 2) {
+    plot_roc_multi(model0, df0_test)  # works. Whew.
+  } else {
+    plot_roc(model0, df0_test)  # works easy   
+  }
+  
+} # func ends
 
 runfunc <- function(df0, 
                     kfoldcv_ui = 5, 
@@ -61,13 +76,17 @@ runfunc <- function(df0,
   require(caret)
   train_control <- trainControl(method="repeatedcv", 
                                 number=kfoldcv_ui, 
-                                repeats=3)
+                                repeats=3,
+                                classProbs = T,
+                                savePredictions = T)
   #, search='random')
   
   
   
   '--- trying logreg now ---'
   if (model_selected_ui == "lg_reg"){ 
+    set.seed(1045)
+    
     logit.CV <- train(x= df0_train[,-1] , y= df0_train[,1], 
                       method = 'glm',
                       family = 'binomial',
@@ -79,7 +98,11 @@ runfunc <- function(df0,
   
   '--- below all are for SVM ---'
   if (model_selected_ui=="svm"){
+    set.seed(1045)
+    
     if (svm_type == "SVM_linear_fixed"){ 
+      set.seed(1045)
+      
       svm2 <- train(y ~., data = df0_train, method = "svmLinear", 
                     trControl = train_control,  preProcess = c("center","scale")) #7s
       
@@ -89,6 +112,7 @@ runfunc <- function(df0,
     
     
     if (svm_type == "SVM_linear_grid"){
+      set.seed(1045)
       
       svm3 <- train(y ~., data = df0_train, method = "svmLinear", 
                     trControl = train_control,  preProcess = c("center","scale"), 
@@ -100,6 +124,8 @@ runfunc <- function(df0,
     
     ## non-linear SVM using RBFs
     if (svm_type == "SVM_RBF"){
+      set.seed(1045)
+      
       svm3a <- train(y ~., data = df0_train, method = "svmRadial", 
                      trControl = train_control, preProcess = c("center","scale"), 
                      tuneLength = 10)
@@ -109,6 +135,7 @@ runfunc <- function(df0,
     
     ## non-linear SVM using polynomial bases
     if (svm_type == "SVM_polynomial"){
+      set.seed(1045)
       
       svm4 <- train(y ~., data = df0_train, method = "svmPoly", 
                     trControl = train_control, preProcess = c("center","scale"), 
@@ -120,40 +147,47 @@ runfunc <- function(df0,
   } #---SVM ends here
   
   if (model_selected_ui == "nb"){ 
+    set.seed(1045)
+    
     # trainControl in caret for cross-validn in classifn
     nb_trControl <- trainControl(method = "cv",
                                  number = kfoldcv_ui,
                                  # repeats = 3,
                                  classProbs = TRUE,
-                                 summaryFunction = twoClassSummary) 
+                                 summaryFunction = multiClassSummary) 
     
     
     # run knn in caret now
-    set.seed(123)
     system.time({
-      
+      set.seed(1045)
+      suppressWarnings(
       nb_fit <- train(y ~ .,
                       data = df0_train,
                       method = 'nb',
                       trControl = nb_trControl,
                       #preProc = c("center", "scale"),
                       metric = 'ROC')
+      )
      })
   return(list(nb_fit,df0_train,df0_test))
 } # func ends
 
   if (model_selected_ui == "nn"){ 
+    set.seed(1045)
+    
     # trainControl in caret for cross-validn in classifn
     nnet_trControl <- trainControl(method = "cv",
                                    number = kfoldcv_ui,
                                    # repeats = 3,
                                    classProbs = TRUE,
-                                   summaryFunction = twoClassSummary) 
+                                   summaryFunction = multiClassSummary) 
     
     
     # run knn in caret now
     set.seed(123)
     system.time({
+      set.seed(1045)
+      
       nnet_fit <- train(y ~ .,
                         data = df0_train,
                         method = 'nnet',

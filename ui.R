@@ -74,6 +74,8 @@ shinyUI(fluidPage(
       tabPanel("Plots",value=3,
                h4('PCA plot'),
                plotOutput("pca_plot"),
+               h4("ROC-AUC Curve"),
+               plotOutput("roc"),
                # HTML('<button data-toggle="collapse" data-target="#demo1">Detailed Result</button>'),
                h4("Model Performance (Cross Validation)"),
                verbatimTextOutput('conf_train'),
