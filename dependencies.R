@@ -13,6 +13,8 @@ if (!require('tidyverse')){install.packages('tidyverse')}; library(tidyverse)
 if (!require('Amelia')){install.packages('Amelia')}; library(Amelia)
 if (!require('mlbench')){install.packages('mlbench')}; library(mlbench)
 if (!require('dplyr')){install.packages('dplyr')}; library(dplyr)
-require(ROCR)
-require(pROC)
-require(MLmetrics)
+if (!require('ROCR')){install.packages('ROCR')}; library(ROCR)
+if (!require('pROC')){install.packages('pROC')}; library(pROC)
+if (!require('MLmetrics')){install.packages('MLmetrics')}; library(MLmetrics)
+
+

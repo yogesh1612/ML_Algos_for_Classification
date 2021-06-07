@@ -54,6 +54,8 @@ shinyUI(fluidPage(
                
       ),
       tabPanel("Model Results", value=3,
+               h4("Distribution of Target Variable (Y)"),
+               verbatimTextOutput("tar_dis"),
                h4("Model Summary"),
                helpText("Training may take a while, upto a minute"),
                verbatimTextOutput("mod_sum"),

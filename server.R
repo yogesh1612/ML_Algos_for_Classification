@@ -169,7 +169,10 @@ server <- function(input, output,session) {
   })
 
 
-
+output$tar_dis <- renderPrint({
+  req(tr_data())
+  round(prop.table(table(tr_data()[,input$sel_y])),3)
+})
 
   #----RF Plot output tab ------#
   # output$err_rate <- renderPlot({
