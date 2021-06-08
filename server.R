@@ -64,7 +64,7 @@ server <- function(input, output,session) {
   output$pca_plot <- renderPlot({
     y <- tr_data()[,input$sel_y]
     X <- tr_data()[,input$sel_x]
-    X <- select_if(X,is.numeric)
+    X <- dplyr::select_if(X,is.numeric)
     pca_plot(y,X)
   })
   
